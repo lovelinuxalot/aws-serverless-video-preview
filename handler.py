@@ -101,3 +101,13 @@ def lambda_function(event, context):
     
     # Returning output message
     return get_json(200, "Preview generated and uploaded")
+
+
+######### TEST EVENT #########################
+#{
+#    "urls": [
+#        video-url-1,
+#        video-url-2,
+#    ]
+#}
+###############################################
