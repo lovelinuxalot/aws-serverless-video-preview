@@ -1,6 +1,11 @@
 service: video-preview-generator
 frameworkVersion: '2'
 
+resources:
+  Resources:
+    OutputBucket:
+      Type: AWS::S3::Bucket
+
 provider:
   name: aws
   stage: dev
@@ -12,7 +17,14 @@ provider:
       Action:
         - s3:PutObject
         - s3:GetObject
-      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+      Resource:
+        Fn::Join:
+          - ""
+          - - "arn:aws:s3:::"
+            - Ref: OutputBucket
+            - "*"
+  environment:
+    BUCKET: ${self:custom.bucket}
 
 plugins:
   - serverless-python-requirements
@@ -32,10 +44,13 @@ functions:
       - '!package.json'
       - '!package-lock.json'
       - '!requirements.txt'
-    
+
+outputs:
+  video-output-bucket: ${self:custom.bucket}
 
 custom:
-  bucket: ${env:BUCKET, 'honeycomb-video-preview-us-west-2'}
+  bucket:
+    Ref: OutputBucket
   pythonRequirements:
     dockerizePip: true
     layer: 

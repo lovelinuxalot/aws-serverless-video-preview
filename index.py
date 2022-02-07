@@ -36,11 +36,14 @@ def video_concatenate(video_list, output):
 
 # Function to upload completed video to S3 bucket
 def video_upload(video):
+    import os
+
+    output_bucket = os.getenv("BUCKET")
     upload_filename = '/'.join([ "preview_uploads_from_lambda", video.split('/')[-1]])
     
     client = boto3.client('s3')
     try:
-        response = client.upload_file(video, "honeycomb-video-preview-us-west-2", upload_filename)
+        response = client.upload_file(video, output_bucket, upload_filename)
         print(response)
     except Exception as e:
         return e
