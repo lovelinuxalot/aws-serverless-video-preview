@@ -6,6 +6,15 @@
 npm install serverless
 ```
 
+## COnfigure AWS for serverless
+
+```bash
+serverless config credentials \
+    --provider aws \
+    --key <access_key> \
+    --secret <secret_key>
+```
+
 ## Install serverless-python-requirement plugin
 
 ```bash
