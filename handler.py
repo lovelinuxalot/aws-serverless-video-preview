@@ -39,7 +39,7 @@ def video_upload(video):
     import os
 
     output_bucket = os.getenv("BUCKET")
-    upload_filename = '/'.join([ "preview_uploads_from_lambda", video.split('/')[-1]])
+    upload_filename = '/'.join([ "preview_uploads", video.split('/')[-1]])
     
     client = boto3.client('s3')
     try:
@@ -53,13 +53,13 @@ def id_generator(size=8, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
 # Main Function
-def main(event, context):
+def lambda_function(event, context):
     #Get urls as a list from event
     urls = event['urls']
     
     # Create directories for storing files and outputs
     Path('/tmp/source').mkdir(parents=True, exist_ok=True)
-    Path('/tmp/preview_uploads_from_lambda').mkdir(parents=True, exist_ok=True)
+    Path('/tmp/preview_uploads').mkdir(parents=True, exist_ok=True)
     
     # Downloading file from URLS
     for url in urls:
@@ -87,12 +87,12 @@ def main(event, context):
             
     # Checking if videos are available before concatenating. Empty lists throws error
     if not len(videos_out_landscape) == 0:
-        video_concatenate(videos_out_landscape, "/tmp/preview_uploads_from_lambda/"+random_name+"_landscape.mp4")
+        video_concatenate(videos_out_landscape, "/tmp/preview_uploads"+random_name+"_landscape.mp4")
     if not len(videos_out_portrait) == 0:
-        video_concatenate(videos_out_portrait, "/tmp/preview_uploads_from_lambda/"+random_name+"_portrait.mp4")
+        video_concatenate(videos_out_portrait, "/tmp/preview_uploads/"+random_name+"_portrait.mp4")
 
     # Reading list of output files for upload
-    out_files = Path('/tmp/preview_uploads_from_lambda').glob('**/*.mp4')
+    out_files = Path('/tmp/preview_uploads').glob('**/*.mp4')
     out_files_list = [ x.as_posix() for x in out_files if x.is_file()]
 
     # Uploading them

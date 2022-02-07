@@ -1,4 +1,4 @@
-# video-preview-generator
+# aws-serverless-framework-video-preview
 
 ## Install serverless if not installed
 
@@ -24,5 +24,5 @@ sls plugin install -n serverless-python-requirements
 ## Deploy code
 
 ```bash
-sls deploy --stage staging
+sls deploy --stage dev
 ```

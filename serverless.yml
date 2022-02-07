@@ -1,4 +1,4 @@
-service: video-preview-generator
+service: video-preview
 frameworkVersion: '2'
 
 resources:
@@ -30,8 +30,8 @@ plugins:
   - serverless-python-requirements
 functions:
   video-preview-generator:
-    name: ${sls:stage}-video-preview-generator
-    handler: index.main
+    name: ${sls:stage}-video-preview
+    handler: handler.lambda_function
     layers:
       - Ref: PythonRequirementsLambdaLayer
     memorySize: 2048
@@ -54,8 +54,8 @@ custom:
   pythonRequirements:
     dockerizePip: true
     layer: 
-      name: video-preview-generator
-      description: "Layer which contains moviepy library"
+      name: video-preview
+      description: "Custom boto3, moviepy Layer"
       compatibleRuntimes:
         - python3.8
       compatibleArchitectures:
